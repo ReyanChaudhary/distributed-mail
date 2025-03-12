@@ -1,0 +1,14 @@
+.env
+
+
+# Ignore Go build artifacts
+/bin/
+/pkg/
+/tmp/
+
+# Ignore IDE settings
+.vscode/
+.idea/
+
+# Ignore logs
+*.log
