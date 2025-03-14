@@ -4,14 +4,28 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/reyan/distributed-mail/config"
-	"github.com/reyan/distributed-mail/internal/api"
+	"distributed-mail/config"
+	"distributed-mail/internal/api"
+	"distributed-mail/internal/storage"
+	"distributed-mail/internal/queue"
 )
 
 func main() {
 	// Initialize config
 	config.Init()
+	storage.ConnectDB()
 
+	err := storage.DB.AutoMigrate(&storage.Email{})
+	if err != nil {
+		log.Fatal("Unable to migrate the DB : ", err)
+	}
+
+	// Initialize Kafka Producer
+	err = queue.InitKafkaWriter("localhost:9092", "email-queue")
+		if err != nil {
+			log.Fatal("Kafka initialization failed:", err)
+		}
+	
 	// Create a new Gin router
 	r := gin.Default()
 
