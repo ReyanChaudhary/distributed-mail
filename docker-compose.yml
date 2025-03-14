@@ -29,9 +29,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: email_service
+      POSTGRES_USER: ${POSTGRES_USER:-reyan}  # Fallback to "reyan" if not set
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bumbum}  # Fallback to "bumbum" if not set
+      POSTGRES_DB: ${POSTGRES_DB:-email_db}  # Fallback to "email_db" if not set
     volumes:
       - pg_data:/var/lib/postgresql/data
 
