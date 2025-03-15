@@ -1,11 +1,13 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
 	"distributed-mail/internal/mail"
 	"distributed-mail/internal/queue"
 	"distributed-mail/internal/storage"
+	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // KnockKnockHandler is a simple test endpoint.
@@ -25,6 +27,7 @@ func SendEmailHandler(c *gin.Context) {
 
 	emailID, err := queue.ProduceEmailTask(emailRequest)
 	if err != nil {
+		log.Fatal("Unable to queue the email because of : ", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to queue email"})
 		return
 	}

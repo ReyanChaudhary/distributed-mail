@@ -48,6 +48,12 @@ func ConnectDB() {
 	log.Println("Database connected successfully")
 }
 
+// UpdateEmailStatus updates the status of an email record in the database.
+func UpdateEmailStatus(emailID string, status string) error {
+	result := DB.Model(&EmailRecord{}).Where("id = ?", emailID).Update("status", status)
+	return result.Error
+}
+
 // SaveEmail stores the email record in the database
 func SaveEmail(emailID string, status string) error {
 	email := EmailRecord{ID: emailID, Status: status}
@@ -69,4 +75,14 @@ func GetEmailStatus(emailID string) (string, error) {
 		return "", result.Error
 	}
 	return email.Status, nil
+}
+
+// GetFailedEmails retrieves all email records with status "failed".
+func GetFailedEmails() ([]EmailRecord, error) {
+	var emails []EmailRecord
+	result := DB.Where("status = ?", "failed").Find(&emails)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return emails, nil
 }

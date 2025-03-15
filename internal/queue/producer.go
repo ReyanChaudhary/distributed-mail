@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/segmentio/kafka-go"
 	"distributed-mail/internal/mail"
+	"distributed-mail/internal/storage"
 )
 
 // writer is the global Kafka writer instance.
@@ -36,6 +37,11 @@ func ProduceEmailTask(emailRequest mail.EmailRequest) (string, error) {
 
 	// Generate a unique email ID.
 	emailID := uuid.New().String()
+
+	// Save the email record to the DB with initial status "queued"
+	if err := storage.SaveEmail(emailID, "queued"); err != nil {
+		return "", fmt.Errorf("failed to save email to DB: %w", err)
+	}
 
 	// Prepare the payload.
 	payload := struct {
