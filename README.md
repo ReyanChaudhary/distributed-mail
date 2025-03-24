@@ -7,6 +7,7 @@ A lightweight and scalable mail delivery system built using **Gin** and **SMTP**
 ## Features
 - REST API for sending emails
 - Configurable SMTP settings
+- Kubernetes for maintaining asynchronous queues producers/consumers and relative sequence
 - Structured architecture with modular components
 - Supports environment-based configuration management
 
